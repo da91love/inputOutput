@@ -1,0 +1,18 @@
+html
+,body
+,div.main{
+	height:100%;
+
+}
+
+#line_config{
+	height:10%;
+
+}
+
+
+
+#canvas{
+	height:90%;
+	border-style: groove;
+}
