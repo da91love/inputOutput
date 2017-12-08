@@ -17,5 +17,5 @@ app.get('/main',function(req,res){
 
 
 app.listen(4100,function(){
-	console.log('page is open');
+	console.log('page 4100 is open');
 });

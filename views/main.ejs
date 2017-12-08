@@ -16,35 +16,132 @@
 
 
 <body>
-	<div class="main">
-		<div id="line_config">
-			<table>
-				<tr>
-					<td>
-						<input type="text" id="line_len"></input>
-					</td>
 
-					<td>
-						<button id="draw_line"> click </button>
-					</td>
-				</tr>
-			</table>
+		<div class="top">
+			<div class="line_config">
+				<table>
+					<tr>
+						<td>
+							<button id="minus">
+								<span class="glyphicon glyphicon-minus"></span>
+							</button>
+						</td>
+
+						<td>
+							<button id="plus">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</td>
+
+						<td>
+							<span id="test"></span>
+						</td>
+
+					</tr>
+				</table>
+			</div>
 		</div>
 
-		<div id="canvas">
 
-			<hr>
 
+		<div class="middle">
+			<div class="line_description">
+				<div class="line-1-0-0-0-0">
+					<div class="panel panel-default">
+						<table class="table table-striped">
+							<tr>
+								<td>INPUT</td>
+								<td><textarea class="form-control" id="taIp-1-0-0-0-0"></textarea></td>
+							</tr>
+							<tr>
+								<td>OUTPUT</td>
+								<td><textarea class="form-control" id="taOp-1-0-0-0-0"></textarea></td>
+							</tr>
+						</table>
+						<button id="del_line1">
+							<span class="glyphicon glyphicon-minus"></span>
+						</button>
+						<button id="app_line1">
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="canvas_outer">
+				<svg class="canvas_inner" height="100%" width="100%">
+					<g class="line-1-0-0-0-0">
+						<line id="line1" x1="150" y1="50%" x2="90%" y2="50%" style="stroke:rgb(0,0,0);stroke-width:2"/>
+						<!--  시작점    -->
+						<circle id="start_circle1" cx="150" cy="50%" r="10" stroke="black" stroke-width="2" fill="black"/>
+						<text id="start_text1" x="150" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
+						<!--  끝점    -->
+						<circle id="end_circle1" cx="90%" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
+						<text id="end_text1" x="90%" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
+					</g>
+<!--
+					<g class="line_1_1">
+						<line id="line1_1" x1="200" y1="50%" x2="90%" y2="50%" style="stroke:rgb(0,0,0);stroke-width:2"/>
+
+						<circle id="start_circle1_1" cx="200" cy="50%" r="10" stroke="black" stroke-width="2" fill="black"/>
+						<text id="start_text1_1" x="200" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
+
+						<circle id="end_circle1_1" cx="200" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
+						<text id="end_text1_1" x="200" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
+					</g>
+-->
+
+			</svg>
+
+			</div>
 		</div>
-
-	</div>
 
 
 
 <script>
-$('#draw_line').click
+//가로넓이 지정하면,
+//canvas_outer가로 수정, 세로 크기 가로의 1/3수정
+//canvas_inner6
+$('.middle').css({"width":$(document).width()+"px"});
+$('.line_description').css({"width":$(document).width() * 0.2+"px"});
+$('.canvas_outer').css({"width":$(document).width() * 0.8+"px"});
+$('#line1').attr("x2",$('.canvas_inner').width()-150);
+$('#end_circle1').attr("cx",$('.canvas_inner').width()-150);
+$('#end_text1').attr("x",$('.canvas_inner').width()-150);
 
 
+
+//*********************라인의 길이를 조정**********************//
+var i=0;
+$('#plus').click(function(){
+	i++;
+	$('#test').text(i);
+	$('.middle').css({"width":$('.middle').width()+100+"px"});
+	$('.canvas_outer').css({"width":$('.middle').width()-$('.line_description').width()+"px"});
+	$('#line1').attr("x2",$('.canvas_inner').width()-150);
+	$('#end_circle1').attr("cx",$('.canvas_inner').width()-150);
+	$('#end_text1').attr("x",$('.canvas_inner').width()-150);
+})
+
+$('#minus').click(function(){
+	if(i<=0){
+		alert("더 이상 작게 설정할 수 없습니다");
+	}
+	else{
+		i--;
+		$('#test').text(i);
+		$('.middle').css({"width":$('.middle').width()-100+"px"});
+		$('.canvas_outer').css({"width":$('.middle').width()-$('.line_description').width()+"px"});
+		$('#line1').attr("x2",$('.canvas_inner').width()-150);
+		$('#end_circle1').attr("cx",$('.canvas_inner').width()-150);
+		$('#end_text1').attr("x",$('.canvas_inner').width()-150);
+	}
+});
+
+
+//*********************ip,op클릭시 해당 텍스트 산출**********************//
 
 
 </script>

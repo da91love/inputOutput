@@ -1,18 +1,29 @@
 html
-,body
-,div.main{
+,body{
 	height:100%;
 
 }
 
-#line_config{
+div.top{
 	height:10%;
+}
+
+div.middle{
+	height:100%;
+}
+
+.line_config{
+
 
 }
 
+.line_description{
+	height:100%;
+	float:left;
+}
 
-
-#canvas{
-	height:90%;
+.canvas_outer{
+	height:100%;
+	float:right;
 	border-style: groove;
 }
