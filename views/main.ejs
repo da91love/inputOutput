@@ -1,150 +1,221 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="/css/style.css">
-	<link href="http://fonts.googleapis.com/earlyaccess/hanna.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link href="http://fonts.googleapis.com/earlyaccess/hanna.css" rel="stylesheet">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 
 
 
 <body>
-
-		<div class="top">
-			<div class="line_config">
-				<table>
-					<tr>
-						<td>
-							<button id="minus">
-								<span class="glyphicon glyphicon-minus"></span>
-							</button>
-						</td>
-
-						<td>
-							<button id="plus">
-								<span class="glyphicon glyphicon-plus"></span>
-							</button>
-						</td>
-
-						<td>
-							<span id="test"></span>
-						</td>
-
-					</tr>
-				</table>
-			</div>
-		</div>
-
-
-
-		<div class="middle">
-			<div class="line_description">
-				<div class="line-1-0-0-0-0">
-					<div class="panel panel-default">
-						<table class="table table-striped">
-							<tr>
-								<td>INPUT</td>
-								<td><textarea class="form-control" id="taIp-1-0-0-0-0"></textarea></td>
-							</tr>
-							<tr>
-								<td>OUTPUT</td>
-								<td><textarea class="form-control" id="taOp-1-0-0-0-0"></textarea></td>
-							</tr>
-						</table>
-						<button id="del_line1">
+	<div class="top">
+		<div class="line_config">
+			<table>
+				<tr>
+					<td>
+						<button id="minus">
 							<span class="glyphicon glyphicon-minus"></span>
 						</button>
-						<button id="app_line1">
+					</td>
+
+					<td>
+						<button id="plus">
 							<span class="glyphicon glyphicon-plus"></span>
 						</button>
-					</div>
-				</div>
+					</td>
+
+					<td><span id="test"></span></td>
+
+				</tr>
+			</table>
+		</div>
+	</div>
 
 
+
+	<div class="middle">
+		<div class="line_description">
+			<div class="line-desc-bunch" step="1" num="1" children="0">
+				<div class="panel panel-default">
+					<table class="table table-striped">
+						<tr>
+							<td>INPUT</td>
+							<td><textarea class="form-control taIp"></textarea></td>
+						</tr>
+						<tr>
+							<td>OUTPUT</td>
+							<td><textarea class="form-control taOp"></textarea></td>
+						</tr>
+					</table>
+					<button class="del_line">
+						<span class="glyphicon glyphicon-minus"></span>
+					</button>
+					<button class="add_line">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</div>			
 			</div>
+ 		
+			<div class="line-desc-bunch" step="1" num="2" children="0">
+				<div class="panel panel-default">
+					<table class="table table-striped">
+						<tr>
+							<td>INPUT</td>
+							<td><textarea class="form-control taIp"></textarea></td>
+						</tr>
+						<tr>
+							<td>OUTPUT</td>
+							<td><textarea class="form-control taOp"></textarea></td>
+						</tr>
+					</table>
+					<button class="del_line">
+						<span class="glyphicon glyphicon-minus"></span>
+					</button>
+					<button class="add_line">
+						<span class="glyphicon glyphicon-plus"></span>
+					</button>
+				</div>			
+			</div>			
+	
 
-			<div class="canvas_outer">
-				<svg class="canvas_inner" height="100%" width="100%">
-					<g class="line-1-0-0-0-0">
-						<line id="line1" x1="150" y1="50%" x2="90%" y2="50%" style="stroke:rgb(0,0,0);stroke-width:2"/>
-						<!--  시작점    -->
-						<circle id="start_circle1" cx="150" cy="50%" r="10" stroke="black" stroke-width="2" fill="black"/>
-						<text id="start_text1" x="150" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
-						<!--  끝점    -->
-						<circle id="end_circle1" cx="90%" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
-						<text id="end_text1" x="90%" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
-					</g>
-<!--
-					<g class="line_1_1">
-						<line id="line1_1" x1="200" y1="50%" x2="90%" y2="50%" style="stroke:rgb(0,0,0);stroke-width:2"/>
-
-						<circle id="start_circle1_1" cx="200" cy="50%" r="10" stroke="black" stroke-width="2" fill="black"/>
-						<text id="start_text1_1" x="200" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
-
-						<circle id="end_circle1_1" cx="200" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
-						<text id="end_text1_1" x="200" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
-					</g>
--->
-
-			</svg>
-
-			</div>
 		</div>
 
+		<div class="canvas_outer">
+			<svg class="canvas_inner" height="100%" width="100%">
+					<g class="line-in-canvas" step="1" num="1" children="0">
+						<line class="line" id="initial-line" x1="150" y1="50%" x2="90%" y2="50%" />
+						<!--  start point   -->
+						<circle class="start_circle" id="initial-start-circle" cx="150" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
+						<text class="start_text" id="initial-start-text" x="150" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
+						<!--  end point    -->
+						<circle class="end_circle" id="initial-end-circle" cx="90%" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
+						<text class="end_text" id="initial-end-text" x="90%" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
+					</g>
+					
+					
+<!--
+					<g class="line-in-canvas" step="1" num="1">
+						<line class="line" id="initial-line" x1="150" y1="50%" x2="90%" y2="50%" />
+						<circle class="start_circle" id="initial-start-circle" cx="150" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
+						<text class="start_text" id="initial-start-text" x="150" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
+						<circle class="end_circle" id="initial-end-circle" cx="90%" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
+						<text class="end_text" id="initial-end-text" x="90%" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
+					</g>
+-->
+			</svg>
+		</div>
+	</div>
 
 
-<script>
-//가로넓이 지정하면,
-//canvas_outer가로 수정, 세로 크기 가로의 1/3수정
-//canvas_inner6
-$('.middle').css({"width":$(document).width()+"px"});
-$('.line_description').css({"width":$(document).width() * 0.2+"px"});
-$('.canvas_outer').css({"width":$(document).width() * 0.8+"px"});
-$('#line1').attr("x2",$('.canvas_inner').width()-150);
-$('#end_circle1').attr("cx",$('.canvas_inner').width()-150);
-$('#end_text1').attr("x",$('.canvas_inner').width()-150);
 
+	<script>
+		//가로넓이 지정하면,
+		//canvas_outer가로 수정, 세로 크기 가로의 1/3수정
+		//canvas_inner
+		
+		//*********************초기 브라우저의 크기를 지정**********************//		
+		$('.middle').css({"width" : $(document).width() + "px"});
+		$('.line_description').css({"width" : $(document).width() * 0.2 + "px"});
+		$('.canvas_outer').css({"width" : $(document).width() * 0.8 + "px"});
+		
+		//*********************초기 라인의 크기를 조정**********************//				
+		$('#initial-line').attr("x2", $('.canvas_inner').width() - 150);
+		$('#initial-end-circle').attr("cx", $('.canvas_inner').width() - 150);
+		$('#initial-end-text').attr("x", $('.canvas_inner').width() - 150);
 
+		//*********************라인의 길이를 조정**********************//
+		var i = 0;
+		$('#plus').click(function() {
+							i++;
+							$('#test').text(i);
+							$('.middle').css({"width" : $('.middle').width() + 100 + "px"});
+							$('.canvas_outer').css({"width" : $('.middle').width()- $('.line_description').width() + "px"});
+							$('#initial-line').attr("x2",$('.canvas_inner').width() - 150);
+							$('#initial-end-circle').attr("cx",$('.canvas_inner').width() - 150);
+							$('#initial-end-text').attr("x",$('.canvas_inner').width() - 150);
+						});
 
-//*********************라인의 길이를 조정**********************//
-var i=0;
-$('#plus').click(function(){
-	i++;
-	$('#test').text(i);
-	$('.middle').css({"width":$('.middle').width()+100+"px"});
-	$('.canvas_outer').css({"width":$('.middle').width()-$('.line_description').width()+"px"});
-	$('#line1').attr("x2",$('.canvas_inner').width()-150);
-	$('#end_circle1').attr("cx",$('.canvas_inner').width()-150);
-	$('#end_text1').attr("x",$('.canvas_inner').width()-150);
-})
+		$('#minus').click(function() {
+					if (i <= 0) {
+						alert("더 이상 작게 설정할 수 없습니다");
+					} else {
+						i--;
+						$('#test').text(i);
+						$('.middle').css({"width" : $('.middle').width() - 100 + "px"});
+						$('.canvas_outer').css({"width" : $('.middle').width()- $('.line_description').width()+ "px"});
+						$('#initial-line').attr("x2", $('.canvas_inner').width() - 150);
+						$('#initial-end-circle').attr("cx",$('.canvas_inner').width() - 150);
+						$('#initial-end-text').attr("x",$('.canvas_inner').width() - 150);
+					}
+				});
 
-$('#minus').click(function(){
-	if(i<=0){
-		alert("더 이상 작게 설정할 수 없습니다");
-	}
-	else{
-		i--;
-		$('#test').text(i);
-		$('.middle').css({"width":$('.middle').width()-100+"px"});
-		$('.canvas_outer').css({"width":$('.middle').width()-$('.line_description').width()+"px"});
-		$('#line1').attr("x2",$('.canvas_inner').width()-150);
-		$('#end_circle1').attr("cx",$('.canvas_inner').width()-150);
-		$('#end_text1').attr("x",$('.canvas_inner').width()-150);
-	}
-});
+		//*********************ip,op클릭시 해당 텍스트 산출**********************//
+		
+		
+		//*********************plus button 클릭시 하위레벨의 라인 생성**********************//
+		
+		
+		
+		//*********************plus button 클릭시 하위레벨의 라인 desc 생성**********************//
+		$(document).on('click','.add_line',function(){
+			//alert($(this).parent().parent().attr('step'));
+			//alert($(this).parent().parent().attr('num'));
+//*			
+			//get parent step
+			var step = $(this).parent().parent().attr('step');
+			
+			//get the number of the same steps which will be created
+			var num = $(this).parent().parent().attr('children');
+			$(this).parent().parent().attr('children',parseInt(num)+1);
+			
+			var html ='<div class="line-desc-bunch" step="'+(parseInt(step)+1)+'" num="'+(parseInt(num)+1)+'" children="0">'+
+						'<div class="panel panel-default">'+
+							'<table class="table table-striped">'+
+								'<tr>'+
+									'<td>INPUT</td>'+
+									'<td><textarea class="form-control taIp"></textarea></td>'+
+								'</tr>'+
+								'<tr>'+
+									'<td>OUTPUT</td>'+
+									'<td><textarea class="form-control taOp"></textarea></td>'+
+								'</tr>'+
+							'</table>'+
+							'<button class="del_line">'+
+								'<span class="glyphicon glyphicon-minus"></span>'+
+							'</button>'+
+							'<button class="add_line">'+
+								'<span class="glyphicon glyphicon-plus"></span>'+
+							'</button>'+
+						'</div>'+
+					'</div>';
+					
+			$(this).parent().parent().after(html);
+//*/					
+		});	
+		
+		//*********************del button 클릭시 하위레벨의 라인 desc 삭제**********************//
+		
+		$(document).on('click','.del_line',function(){
+			var step = $(this).parent().parent().attr('step');
+			var num = $(this).parent().parent().attr('num');
+			if(step=="1" && num=="1"){}
+			else{
+				$(this).parent().parent().remove();
+			}
+		});
+		
+		
+	</script>
 
-
-//*********************ip,op클릭시 해당 텍스트 산출**********************//
-
-
-</script>
+	
 
 
 </body>
