@@ -55,37 +55,11 @@
 							<td><textarea class="form-control taOp"></textarea></td>
 						</tr>
 					</table>
-					<button class="del_line">
-						<span class="glyphicon glyphicon-minus"></span>
-					</button>
 					<button class="add_line">
 						<span class="glyphicon glyphicon-plus"></span>
 					</button>
 				</div>			
 			</div>
- 		
-			<div class="line-desc-bunch" step="1" num="2" children="0">
-				<div class="panel panel-default">
-					<table class="table table-striped">
-						<tr>
-							<td>INPUT</td>
-							<td><textarea class="form-control taIp"></textarea></td>
-						</tr>
-						<tr>
-							<td>OUTPUT</td>
-							<td><textarea class="form-control taOp"></textarea></td>
-						</tr>
-					</table>
-					<button class="del_line">
-						<span class="glyphicon glyphicon-minus"></span>
-					</button>
-					<button class="add_line">
-						<span class="glyphicon glyphicon-plus"></span>
-					</button>
-				</div>			
-			</div>			
-	
-
 		</div>
 
 		<div class="canvas_outer">
@@ -168,15 +142,26 @@
 		$(document).on('click','.add_line',function(){
 			//alert($(this).parent().parent().attr('step'));
 			//alert($(this).parent().parent().attr('num'));
+			
+			var ldb = $(this).parent().parent();
 //*			
 			//get parent step
-			var step = $(this).parent().parent().attr('step');
+			var step = ldb.attr('step');
 			
 			//get the number of the same steps which will be created
-			var num = $(this).parent().parent().attr('children');
-			$(this).parent().parent().attr('children',parseInt(num)+1);
+			var children = ldb.attr('children');
 			
-			var html ='<div class="line-desc-bunch" step="'+(parseInt(step)+1)+'" num="'+(parseInt(num)+1)+'" children="0">'+
+			//get parent num
+			var num = ldb.attr('num');
+			
+			//insert html with above step and num
+			ldb.attr('children',parseInt(children)+1);
+			
+			var html ='<div class="line-desc-bunch" '+
+						'step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+'" '+
+						'p-step="'+step+ '" p-num="'+ num +'" '+
+						'children="0" style="width:'+ ($(this).parent().parent().width()-20)+'px;'+
+						'float:right;border-left: 2px dotted rgb(0,64,0);">'+
 						'<div class="panel panel-default">'+
 							'<table class="table table-striped">'+
 								'<tr>'+
@@ -196,20 +181,33 @@
 							'</button>'+
 						'</div>'+
 					'</div>';
-					
-			$(this).parent().parent().after(html);
+			$(this).parent().after(html);
+			
+			//down sizing new inserted line description bunch
 //*/					
 		});	
 		
 		//*********************del button 클릭시 하위레벨의 라인 desc 삭제**********************//
-		
 		$(document).on('click','.del_line',function(){
-			var step = $(this).parent().parent().attr('step');
-			var num = $(this).parent().parent().attr('num');
-			if(step=="1" && num=="1"){}
-			else{
-				$(this).parent().parent().remove();
-			}
+			alert('하위 레벨까지 모두 삭제됩니다. 정말 삭제하시겠습니까?');
+			var ldb = $(this).parent().parent();
+
+			//if children is removed, its parent children attr decrease by 1
+			var pStep = ldb.attr('p-step');
+			var pNum = ldb.attr('p-num');
+			var allLdb = $('.line-desc-bunch');			
+
+			for(var i=0;i<allLdb.length;i++){
+				if(allLdb.eq(i).attr('step')==pStep && allLdb.eq(i).attr('num')==pNum){
+					allLdb.eq(i).attr('children',parseInt(allLdb.eq(i).attr('children'))-1);
+				}			
+			}		
+			
+			
+			//if parent is removed, its children will be deleted together			
+			var step = ldb.attr('step');
+			var num = ldb.attr('num');			
+			ldb.remove();
 		});
 		
 		
