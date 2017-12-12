@@ -21,7 +21,7 @@ div.middle{
 .line_description{
 	height:100%;
 	float:left;
-	
+
 	background-color:white;
 	overflow-y: scroll;
 	position: fixed;

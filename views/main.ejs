@@ -58,30 +58,35 @@
 					<button class="add_line">
 						<span class="glyphicon glyphicon-plus"></span>
 					</button>
-				</div>			
+				</div>
 			</div>
 		</div>
 
 		<div class="canvas_outer">
 			<svg class="canvas_inner" height="100%" width="100%">
-					<g class="line-in-canvas" step="1" num="1" children="0">
-						<line class="line" id="initial-line" x1="150" y1="50%" x2="90%" y2="50%" />
-						<!--  start point   -->
-						<circle class="start_circle" id="initial-start-circle" cx="150" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
-						<text class="start_text" id="initial-start-text" x="150" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
-						<!--  end point    -->
-						<circle class="end_circle" id="initial-end-circle" cx="90%" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
-						<text class="end_text" id="initial-end-text" x="90%" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
-					</g>
-					
-					
+				<g class="line-in-canvas" step="1" num="1" children="0" >
+					<line class="line" id="initial-line" line-len=""/>
+					<!--  start point   -->
+					<circle class="start_circle" id="initial-start-circle" stroke="black" stroke-width="2" fill="black" />
+					<text class="start_text" id="initial-start-text" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
+					<!--  end point    -->
+					<circle class="end_circle" id="initial-end-circle" stroke="black" stroke-width="2" fill="black" />
+					<text class="end_text" id="initial-end-text" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
+
+					<!-- <g class="line-in-canvas" step="2" num="2" p-step="1" p-num="1" children="0"><line class="line" line-len="459.20000000000005" x1="150" y1="666.6" x2="150" y2="207.39999999999998" style="stroke:rgb(0,0,0);stroke-width:2;"></line></g> -->
+
+				</g>
+
+
+
+
 <!--
-					<g class="line-in-canvas" step="1" num="1">
-						<line class="line" id="initial-line" x1="150" y1="50%" x2="90%" y2="50%" />
-						<circle class="start_circle" id="initial-start-circle" cx="150" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
-						<text class="start_text" id="initial-start-text" x="150" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
-						<circle class="end_circle" id="initial-end-circle" cx="90%" cy="50%" r="10" stroke="black" stroke-width="2" fill="black" />
-						<text class="end_text" id="initial-end-text" x="90%" y="50%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
+					<g class="line-in-canvas" step="1" num="1" children="0">
+						<line class="line" id="initial-line" line-len="" x1="150" y1="30%" x2="90%" y2="30%" />
+						<circle class="start_circle" id="initial-start-circle" cx="150" cy="30%" r="10" stroke="black" stroke-width="2" fill="black" />
+						<text class="start_text" id="initial-start-text" x="150" y="30%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
+						<circle class="end_circle" id="initial-end-circle" cx="90%" cy="30%" r="10" stroke="black" stroke-width="2" fill="black" />
+						<text class="end_text" id="initial-end-text" x="90%" y="30%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
 					</g>
 -->
 			</svg>
@@ -94,70 +99,75 @@
 		//가로넓이 지정하면,
 		//canvas_outer가로 수정, 세로 크기 가로의 1/3수정
 		//canvas_inner
-		
-		//*********************초기 브라우저의 크기를 지정**********************//		
+
+		//*********************초기 브라우저의 길이, 원의 위치, 텍스트의 위치를 지정**********************//
 		$('.middle').css({"width" : $(document).width() + "px"});
 		$('.line_description').css({"width" : $(document).width() * 0.2 + "px"});
 		$('.canvas_outer').css({"width" : $(document).width() * 0.8 + "px"});
-		
-		//*********************초기 라인의 크기를 조정**********************//				
-		$('#initial-line').attr("x2", $('.canvas_inner').width() - 150);
-		$('#initial-end-circle').attr("cx", $('.canvas_inner').width() - 150);
-		$('#initial-end-text').attr("x", $('.canvas_inner').width() - 150);
+
+		//*********************초기 라인의 를 조정**********************//
+		$('#initial-line').attr({"x1":150,"y1":$('.canvas_inner').height()*0.5,"x2":$('.canvas_inner').width() - 150,"y2":$('.canvas_inner').height()*0.5});
+		$('#initial-line').attr("line-len",$('.canvas_inner').width()-300);
+
+		$('#initial-start-circle').attr({"cx":150, "cy":$('.canvas_inner').height()*0.5, "r":10});
+		$('#initial-start-text').attr({"x":150, "y":$('.canvas_inner').height()*0.5});
+
+		$('#initial-end-circle').attr({"cx":$('.canvas_inner').width() - 150, "cy":$('.canvas_inner').height()*0.5, "r":10});
+		$('#initial-end-text').attr({"x":$('.canvas_inner').width() - 150, "y":$('.canvas_inner').height()*0.5});
 
 		//*********************라인의 길이를 조정**********************//
 		var i = 0;
 		$('#plus').click(function() {
-							i++;
-							$('#test').text(i);
-							$('.middle').css({"width" : $('.middle').width() + 100 + "px"});
-							$('.canvas_outer').css({"width" : $('.middle').width()- $('.line_description').width() + "px"});
-							$('#initial-line').attr("x2",$('.canvas_inner').width() - 150);
-							$('#initial-end-circle').attr("cx",$('.canvas_inner').width() - 150);
-							$('#initial-end-text').attr("x",$('.canvas_inner').width() - 150);
-						});
+			i++;
+			$('#test').text(i);
+			$('.middle').css({"width" : $('.middle').width() + 100 + "px"});
+			$('.canvas_outer').css({"width" : $('.middle').width()- $('.line_description').width() + "px"});
+			$('#initial-line').attr("x2",$('.canvas_inner').width() - 150);
+			$('#initial-end-circle').attr("cx",$('.canvas_inner').width() - 150);
+			$('#initial-end-text').attr("x",$('.canvas_inner').width() - 150);
+		});
 
 		$('#minus').click(function() {
-					if (i <= 0) {
-						alert("더 이상 작게 설정할 수 없습니다");
-					} else {
-						i--;
-						$('#test').text(i);
-						$('.middle').css({"width" : $('.middle').width() - 100 + "px"});
-						$('.canvas_outer').css({"width" : $('.middle').width()- $('.line_description').width()+ "px"});
-						$('#initial-line').attr("x2", $('.canvas_inner').width() - 150);
-						$('#initial-end-circle').attr("cx",$('.canvas_inner').width() - 150);
-						$('#initial-end-text').attr("x",$('.canvas_inner').width() - 150);
-					}
-				});
+			if (i <= 0) {
+				alert("더 이상 작게 설정할 수 없습니다");
+			} else {
+				i--;
+				$('#test').text(i);
+				$('.middle').css({"width" : $('.middle').width() - 100 + "px"});
+				$('.canvas_outer').css({"width" : $('.middle').width()- $('.line_description').width()+ "px"});
+				$('#initial-line').attr("x2", $('.canvas_inner').width() - 150);
+				$('#initial-end-circle').attr("cx",$('.canvas_inner').width() - 150);
+				$('#initial-end-text').attr("x",$('.canvas_inner').width() - 150);
+			}
+		});
 
 		//*********************ip,op클릭시 해당 텍스트 산출**********************//
-		
-		
+
+
 		//*********************plus button 클릭시 하위레벨의 라인 생성**********************//
-		
-		
-		
+
+
+
 		//*********************plus button 클릭시 하위레벨의 라인 desc 생성**********************//
 		$(document).on('click','.add_line',function(){
 			//alert($(this).parent().parent().attr('step'));
 			//alert($(this).parent().parent().attr('num'));
-			
+
 			var ldb = $(this).parent().parent();
-//*			
+//*
 			//get parent step
 			var step = ldb.attr('step');
-			
+
 			//get the number of the same steps which will be created
 			var children = ldb.attr('children');
-			
+
 			//get parent num
 			var num = ldb.attr('num');
-			
+
 			//insert html with above step and num
 			ldb.attr('children',parseInt(children)+1);
-			
-			var html ='<div class="line-desc-bunch" '+
+
+			var htmlDesc ='<div class="line-desc-bunch" '+
 						'step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+'" '+
 						'p-step="'+step+ '" p-num="'+ num +'" '+
 						'children="0" style="width:'+ ($(this).parent().parent().width()-20)+'px;'+
@@ -181,12 +191,13 @@
 							'</button>'+
 						'</div>'+
 					'</div>';
-			$(this).parent().after(html);
-			
+			//$(this).parent().after(htmlDesc);
+			ldb.append(htmlDesc);
+
 			//down sizing new inserted line description bunch
-//*/					
-		});	
-		
+//*/
+		});
+
 		//*********************del button 클릭시 하위레벨의 라인 desc 삭제**********************//
 		$(document).on('click','.del_line',function(){
 			alert('하위 레벨까지 모두 삭제됩니다. 정말 삭제하시겠습니까?');
@@ -195,25 +206,99 @@
 			//if children is removed, its parent children attr decrease by 1
 			var pStep = ldb.attr('p-step');
 			var pNum = ldb.attr('p-num');
-			var allLdb = $('.line-desc-bunch');			
+			var allLdb = $('.line-desc-bunch');
 
 			for(var i=0;i<allLdb.length;i++){
 				if(allLdb.eq(i).attr('step')==pStep && allLdb.eq(i).attr('num')==pNum){
 					allLdb.eq(i).attr('children',parseInt(allLdb.eq(i).attr('children'))-1);
-				}			
-			}		
-			
-			
-			//if parent is removed, its children will be deleted together			
+				}
+			}
+
+
+			//if parent is removed, its children will be deleted together
 			var step = ldb.attr('step');
-			var num = ldb.attr('num');			
+			var num = ldb.attr('num');
 			ldb.remove();
 		});
-		
-		
+
+		//*********************plus button 클릭시 하위레벨의 라인 생성**********************//
+//*
+		$(document).on('click','.add_line',function(){
+			var ldb = $(this).parent().parent();
+			//*
+			//get parent step
+			var step = ldb.attr('step');
+
+			//get parent num
+			var num = ldb.attr('num');
+
+			//get the number of the same steps which will be created
+			var children = ldb.attr('children');
+
+			//find out .line-in-canvas object matched with above step and num
+			var lic = null;
+			var allLic = $('.line-in-canvas');
+
+			for(var i=0;i<allLic.length;i++){
+				if(allLic.eq(i).attr('step')==step && allLic.eq(i).attr('num')==num){
+					lic = allLic.eq(i);
+					lic.attr('children',parseInt(children)+1);
+				}
+			}
+
+			var x1 = null;
+			var y1 = null;
+			var x2 = null;
+			var y2 = null;
+			if((parseInt(step)+1)%2==0){
+				//line's start x point
+				x1 = lic.children('line').attr('x1');
+				//line's start y point
+				y1 = parseInt(lic.children('line').attr('y1'))+parseInt(lic.children('line').attr('line-len'))*0.4*0.5;
+				//line's end x point
+				x2 = lic.children('line').attr('x1');
+				//line's end y point
+				y2 = parseInt(lic.children('line').attr('y1'))-parseInt(lic.children('line').attr('line-len'))*0.4*0.5;
+
+			}
+			else{
+				//line's start x point
+
+				//line's start y point
+
+				//line's end x point
+
+				//line's end y point
+			}
+
+			var htmlLine =
+			'<g class="line-in-canvas" step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+'" p-step="'+step+ '" p-num="'+ num +'" children="0">'+
+			'<line class="line" line-len="'+parseInt(lic.children('line').attr('line-len'))*0.4+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" style="stroke:rgb(0,0,0);stroke-width:2;"/>'+
+			'</g>
+/*
+			var shape = svgDocument.createElementNS(svgns,"circle");
+		    shape.setAttributeNS(null, "cx", 25);
+		    shape.setAttributeNS(null, "cy", 25);
+		    shape.setAttributeNS(null, "r", 20);
+		    shape.setAttributeNS(null, "fill", "green");
+		    document.getElementById('canvas').appendChild(shape);
+//*/
+
+
+
+
+
+			lic.append(htmlLine);
+
+
+
+		});
+
+//*/
+
 	</script>
 
-	
+
 
 
 </body>
