@@ -161,14 +161,15 @@
 			for(var i=0;i<allLic.length;i++){
 				if(allLic.eq(i).attr('step')==step && allLic.eq(i).attr('num')==num){
 					lic = allLic.eq(i);
-					lic.attr('children',parseInt(children)+1);
 					break;
 				}
 			}
-
-			//insert html with above step and num
+		
+			//config children
 			ldb.attr('children',parseInt(children)+1);
-
+			lic.attr('children',parseInt(children)+1);
+			
+			//add input-ouput box in desc part
 			var htmlDesc ='<div class="line-desc-bunch" '+
 						'step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+'" '+
 						'p-step="'+step+ '" p-num="'+ num +'" '+
@@ -195,7 +196,7 @@
 					'</div>';
 			ldb.append(htmlDesc);
 
-
+			//add group in line part
 			var group = document.createElementNS('http://www.w3.org/2000/svg','g');
 			group.setAttributeNS(null, 'class', 'line-in-canvas');
 			group.setAttributeNS(null, 'step', parseInt(step)+1);
@@ -204,11 +205,7 @@
 			group.setAttributeNS(null, 'p-num', num);
 			group.setAttributeNS(null, 'children', 0);
 			lic.append(group);
-/*
-			var htmlLine ='<g class="line-in-canvas" step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+
-						'" p-step="'+step+ '" p-num="'+ num +'" children="0"></g>';
-			lic.append(htmlLine);
-//*/
+
 		});
 
 		//*********************plus button 클릭시 하위레벨의 라인 생성**********************//
@@ -236,36 +233,31 @@
 				//line's start x point
 				x1 = lic.children('line').attr('x1');
 				//line's start y point
-				y1 = parseInt(lic.children('line').attr('y1'))+parseInt(lic.children('line').attr('line-len'))*0.4*0.5;
+				y1 = parseInt(lic.children('line').attr('y1'))+parseInt(lic.children('line').attr('line-len'))*0.5*0.5;
 				//line's end x point
 				x2 = lic.children('line').attr('x1');
 				//line's end y point
-				y2 = parseInt(lic.children('line').attr('y1'))-parseInt(lic.children('line').attr('line-len'))*0.4*0.5;
-
+				y2 = parseInt(lic.children('line').attr('y1'))-parseInt(lic.children('line').attr('line-len'))*0.5*0.5;
 			}
 			else{
 				//line's start x point
-
+				x1 = parseInt(lic.children('line').attr('x1'))-parseInt(lic.children('line').attr('line-len'))*0.5*0.5;
 				//line's start y point
-
+				y1 = lic.children('line').attr('y2');
 				//line's end x point
-
+				x2 = parseInt(lic.children('line').attr('x1'))+parseInt(lic.children('line').attr('line-len'))*0.5*0.5;
 				//line's end y point
+				y2 = lic.children('line').attr('y2');
 			}
-
-
-//*
+			
 			var newLic = null;
 			for(var i=0;i<allLic.length;i++){
-				alert("allLic.eq(i).attr('step') =" + allLic.eq(i).attr('step') +"/" + "step =" + step);
-				alert("allLic.eq(i).attr('num') =" + allLic.eq(i).attr('num')+"/" + "children =" + children);
 				if(allLic.eq(i).attr('step')==parseInt(step)+1 && allLic.eq(i).attr('num')==parseInt(children)){
 					newLic = allLic.eq(i);
-					alert("newLic.attr('step') ="+newLic.attr('step'));
+					break;
 				}
 			}
 
-//*/
 			var line = document.createElementNS('http://www.w3.org/2000/svg','line');
 			line.setAttributeNS(null, 'class', 'line');
 			line.setAttributeNS(null, 'line-len', parseInt(lic.children('line').attr('line-len'))*0.4);
@@ -274,17 +266,7 @@
 			line.setAttributeNS(null, 'x2', x2);
 			line.setAttributeNS(null, 'y2', y2);
 			newLic.append(line);
-	//*/
 
-	/*/
-			var shape = document.createElementNS('http://www.w3.org/2000/svg','circle');
-		    shape.setAttributeNS(null, 'cx', 25);
-		    shape.setAttributeNS(null, 'cy', 25);
-		    shape.setAttributeNS(null, 'r', 20);
-		    shape.setAttributeNS(null, 'fill', 'green');
-		    lic.append(shape);
-
-	//*/
 
 
 		});
@@ -297,23 +279,47 @@
 		$(document).on('click','.del_line',function(){
 			alert('하위 레벨까지 모두 삭제됩니다. 정말 삭제하시겠습니까?');
 			var ldb = $(this).parent().parent();
-
-			//if children is removed, its parent children attr decrease by 1
+			var step = ldb.attr('step');
+			var num = ldb.attr('num');
+			var children = ldb.attr('children');
 			var pStep = ldb.attr('p-step');
 			var pNum = ldb.attr('p-num');
 			var allLdb = $('.line-desc-bunch');
+			var lic = null;
+			var allLic = $('.line-in-canvas');
 
-			for(var i=0;i<allLdb.length;i++){
-				if(allLdb.eq(i).attr('step')==pStep && allLdb.eq(i).attr('num')==pNum){
-					allLdb.eq(i).attr('children',parseInt(allLdb.eq(i).attr('children'))-1);
+			for(var i=0;i<allLic.length;i++){
+				if(allLic.eq(i).attr('step')==step && allLic.eq(i).attr('num')==num){
+					lic = allLic.eq(i);
+					break;
 				}
 			}
 
+			//if children is removed, its parent children attr decrease by 1
+			for(var i=0;i<allLdb.length;i++){
+				if(allLdb.eq(i).attr('step')==pStep && allLdb.eq(i).attr('num')==pNum){
+					allLdb.eq(i).attr('children',parseInt(allLdb.eq(i).attr('children'))-1);
+					break;
+				}
+			}
+			
+			for(var i=0;i<allLic.length;i++){
+				if(allLic.eq(i).attr('step')==pStep && allLic.eq(i).attr('num')==pNum){
+					allLic.eq(i).attr('children',parseInt(allLic.eq(i).attr('children'))-1);
+					break;
+				}
+			}
 
 			//if parent is removed, its children will be deleted together
-			var step = ldb.attr('step');
-			var num = ldb.attr('num');
 			ldb.remove();
+			
+			for(var i=0;i<allLic.length;i++){
+				if(allLic.eq(i).attr('step')==step && allLic.eq(i).attr('num')==num){
+					allLic.eq(i).remove();
+					break;
+				}
+			}
+
 		});
 
 
