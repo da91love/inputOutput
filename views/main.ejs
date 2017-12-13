@@ -73,7 +73,6 @@
 					<circle class="end_circle" id="initial-end-circle" stroke="black" stroke-width="2" fill="black" />
 					<text class="end_text" id="initial-end-text" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
 
-					<!-- <g class="line-in-canvas" step="2" num="2" p-step="1" p-num="1" children="0"><line class="line" line-len="459.20000000000005" x1="150" y1="666.6" x2="150" y2="207.39999999999998" style="stroke:rgb(0,0,0);stroke-width:2;"></line></g> -->
 
 				</g>
 
@@ -144,25 +143,28 @@
 		//*********************ip,op클릭시 해당 텍스트 산출**********************//
 
 
-		//*********************plus button 클릭시 하위레벨의 라인 생성**********************//
+
+
 
 
 
 		//*********************plus button 클릭시 하위레벨의 라인 desc 생성**********************//
 		$(document).on('click','.add_line',function(){
-			//alert($(this).parent().parent().attr('step'));
-			//alert($(this).parent().parent().attr('num'));
-
 			var ldb = $(this).parent().parent();
-//*
-			//get parent step
 			var step = ldb.attr('step');
-
-			//get the number of the same steps which will be created
 			var children = ldb.attr('children');
-
-			//get parent num
 			var num = ldb.attr('num');
+
+			var lic = null;
+			var allLic = $('.line-in-canvas');
+
+			for(var i=0;i<allLic.length;i++){
+				if(allLic.eq(i).attr('step')==step && allLic.eq(i).attr('num')==num){
+					lic = allLic.eq(i);
+					lic.attr('children',parseInt(children)+1);
+					break;
+				}
+			}
 
 			//insert html with above step and num
 			ldb.attr('children',parseInt(children)+1);
@@ -191,61 +193,41 @@
 							'</button>'+
 						'</div>'+
 					'</div>';
-			//$(this).parent().after(htmlDesc);
 			ldb.append(htmlDesc);
 
-			//down sizing new inserted line description bunch
+
+			var group = document.createElementNS('http://www.w3.org/2000/svg','g');
+			group.setAttributeNS(null, 'class', 'line-in-canvas');
+			group.setAttributeNS(null, 'step', parseInt(step)+1);
+			group.setAttributeNS(null, 'num', parseInt(children)+1);
+			group.setAttributeNS(null, 'p-step', step);
+			group.setAttributeNS(null, 'p-num', num);
+			group.setAttributeNS(null, 'children', 0);
+			lic.append(group);
+/*
+			var htmlLine ='<g class="line-in-canvas" step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+
+						'" p-step="'+step+ '" p-num="'+ num +'" children="0"></g>';
+			lic.append(htmlLine);
 //*/
 		});
 
-		//*********************del button 클릭시 하위레벨의 라인 desc 삭제**********************//
-		$(document).on('click','.del_line',function(){
-			alert('하위 레벨까지 모두 삭제됩니다. 정말 삭제하시겠습니까?');
-			var ldb = $(this).parent().parent();
-
-			//if children is removed, its parent children attr decrease by 1
-			var pStep = ldb.attr('p-step');
-			var pNum = ldb.attr('p-num');
-			var allLdb = $('.line-desc-bunch');
-
-			for(var i=0;i<allLdb.length;i++){
-				if(allLdb.eq(i).attr('step')==pStep && allLdb.eq(i).attr('num')==pNum){
-					allLdb.eq(i).attr('children',parseInt(allLdb.eq(i).attr('children'))-1);
-				}
-			}
-
-
-			//if parent is removed, its children will be deleted together
-			var step = ldb.attr('step');
-			var num = ldb.attr('num');
-			ldb.remove();
-		});
-
 		//*********************plus button 클릭시 하위레벨의 라인 생성**********************//
-//*
 		$(document).on('click','.add_line',function(){
 			var ldb = $(this).parent().parent();
-			//*
-			//get parent step
 			var step = ldb.attr('step');
-
-			//get parent num
-			var num = ldb.attr('num');
-
-			//get the number of the same steps which will be created
 			var children = ldb.attr('children');
-
-			//find out .line-in-canvas object matched with above step and num
+			var num = ldb.attr('num');
 			var lic = null;
 			var allLic = $('.line-in-canvas');
 
 			for(var i=0;i<allLic.length;i++){
 				if(allLic.eq(i).attr('step')==step && allLic.eq(i).attr('num')==num){
 					lic = allLic.eq(i);
-					lic.attr('children',parseInt(children)+1);
+					break;
 				}
 			}
 
+			//corordination config
 			var x1 = null;
 			var y1 = null;
 			var x2 = null;
@@ -271,30 +253,75 @@
 				//line's end y point
 			}
 
-			var htmlLine =
-			'<g class="line-in-canvas" step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+'" p-step="'+step+ '" p-num="'+ num +'" children="0">'+
-			'<line class="line" line-len="'+parseInt(lic.children('line').attr('line-len'))*0.4+'" x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" style="stroke:rgb(0,0,0);stroke-width:2;"/>'+
-			'</g>
-/*
-			var shape = svgDocument.createElementNS(svgns,"circle");
-		    shape.setAttributeNS(null, "cx", 25);
-		    shape.setAttributeNS(null, "cy", 25);
-		    shape.setAttributeNS(null, "r", 20);
-		    shape.setAttributeNS(null, "fill", "green");
-		    document.getElementById('canvas').appendChild(shape);
+
+//*
+			var newLic = null;
+			for(var i=0;i<allLic.length;i++){
+				alert("allLic.eq(i).attr('step') =" + allLic.eq(i).attr('step') +"/" + "step =" + step);
+				alert("allLic.eq(i).attr('num') =" + allLic.eq(i).attr('num')+"/" + "children =" + children);
+				if(allLic.eq(i).attr('step')==parseInt(step)+1 && allLic.eq(i).attr('num')==parseInt(children)){
+					newLic = allLic.eq(i);
+					alert("newLic.attr('step') ="+newLic.attr('step'));
+				}
+			}
+
 //*/
+			var line = document.createElementNS('http://www.w3.org/2000/svg','line');
+			line.setAttributeNS(null, 'class', 'line');
+			line.setAttributeNS(null, 'line-len', parseInt(lic.children('line').attr('line-len'))*0.4);
+			line.setAttributeNS(null, 'x1', x1);
+			line.setAttributeNS(null, 'y1', y1);
+			line.setAttributeNS(null, 'x2', x2);
+			line.setAttributeNS(null, 'y2', y2);
+			newLic.append(line);
+	//*/
 
+	/*/
+			var shape = document.createElementNS('http://www.w3.org/2000/svg','circle');
+		    shape.setAttributeNS(null, 'cx', 25);
+		    shape.setAttributeNS(null, 'cy', 25);
+		    shape.setAttributeNS(null, 'r', 20);
+		    shape.setAttributeNS(null, 'fill', 'green');
+		    lic.append(shape);
 
-
-
-
-			lic.append(htmlLine);
-
+	//*/
 
 
 		});
 
-//*/
+
+
+
+
+		//*********************del button 클릭시 하위레벨의 라인 desc 삭제**********************//
+		$(document).on('click','.del_line',function(){
+			alert('하위 레벨까지 모두 삭제됩니다. 정말 삭제하시겠습니까?');
+			var ldb = $(this).parent().parent();
+
+			//if children is removed, its parent children attr decrease by 1
+			var pStep = ldb.attr('p-step');
+			var pNum = ldb.attr('p-num');
+			var allLdb = $('.line-desc-bunch');
+
+			for(var i=0;i<allLdb.length;i++){
+				if(allLdb.eq(i).attr('step')==pStep && allLdb.eq(i).attr('num')==pNum){
+					allLdb.eq(i).attr('children',parseInt(allLdb.eq(i).attr('children'))-1);
+				}
+			}
+
+
+			//if parent is removed, its children will be deleted together
+			var step = ldb.attr('step');
+			var num = ldb.attr('num');
+			ldb.remove();
+		});
+
+
+
+
+
+
+
 
 	</script>
 
