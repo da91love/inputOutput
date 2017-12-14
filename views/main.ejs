@@ -72,22 +72,7 @@
 					<!--  end point    -->
 					<circle class="end_circle" id="initial-end-circle" stroke="black" stroke-width="2" fill="black" />
 					<text class="end_text" id="initial-end-text" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
-
-
 				</g>
-
-
-
-
-<!--
-					<g class="line-in-canvas" step="1" num="1" children="0">
-						<line class="line" id="initial-line" line-len="" x1="150" y1="30%" x2="90%" y2="30%" />
-						<circle class="start_circle" id="initial-start-circle" cx="150" cy="30%" r="10" stroke="black" stroke-width="2" fill="black" />
-						<text class="start_text" id="initial-start-text" x="150" y="30%" alignment-baseline="middle" text-anchor="middle" fill="white">IP</text>
-						<circle class="end_circle" id="initial-end-circle" cx="90%" cy="30%" r="10" stroke="black" stroke-width="2" fill="black" />
-						<text class="end_text" id="initial-end-text" x="90%" y="30%" alignment-baseline="middle" text-anchor="middle" fill="white">OP</text>
-					</g>
--->
 			</svg>
 		</div>
 	</div>
@@ -164,11 +149,11 @@
 					break;
 				}
 			}
-		
+
 			//config children
 			ldb.attr('children',parseInt(children)+1);
 			lic.attr('children',parseInt(children)+1);
-			
+
 			//add input-ouput box in desc part
 			var htmlDesc ='<div class="line-desc-bunch" '+
 						'step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+'" '+
@@ -249,7 +234,7 @@
 				//line's end y point
 				y2 = lic.children('line').attr('y2');
 			}
-			
+
 			var newLic = null;
 			for(var i=0;i<allLic.length;i++){
 				if(allLic.eq(i).attr('step')==parseInt(step)+1 && allLic.eq(i).attr('num')==parseInt(children)){
@@ -273,8 +258,6 @@
 
 
 
-
-
 		//*********************del button 클릭시 하위레벨의 라인 desc 삭제**********************//
 		$(document).on('click','.del_line',function(){
 			alert('하위 레벨까지 모두 삭제됩니다. 정말 삭제하시겠습니까?');
@@ -288,6 +271,7 @@
 			var lic = null;
 			var allLic = $('.line-in-canvas');
 
+			//선택된decs과 같은 레벨의 lic 지정
 			for(var i=0;i<allLic.length;i++){
 				if(allLic.eq(i).attr('step')==step && allLic.eq(i).attr('num')==num){
 					lic = allLic.eq(i);
@@ -295,14 +279,15 @@
 				}
 			}
 
-			//if children is removed, its parent children attr decrease by 1
+			//if children is removed, its parent children attr decrease by 1 in desc
 			for(var i=0;i<allLdb.length;i++){
 				if(allLdb.eq(i).attr('step')==pStep && allLdb.eq(i).attr('num')==pNum){
 					allLdb.eq(i).attr('children',parseInt(allLdb.eq(i).attr('children'))-1);
 					break;
 				}
 			}
-			
+
+			//if children is removed, its parent children attr decrease by 1 in canvas
 			for(var i=0;i<allLic.length;i++){
 				if(allLic.eq(i).attr('step')==pStep && allLic.eq(i).attr('num')==pNum){
 					allLic.eq(i).attr('children',parseInt(allLic.eq(i).attr('children'))-1);
@@ -312,7 +297,7 @@
 
 			//if parent is removed, its children will be deleted together
 			ldb.remove();
-			
+
 			for(var i=0;i<allLic.length;i++){
 				if(allLic.eq(i).attr('step')==step && allLic.eq(i).attr('num')==num){
 					allLic.eq(i).remove();
@@ -322,9 +307,64 @@
 
 		});
 
+		//*********************라인의 위치 이동**********************//
+//*
+		var dragging = false;
+		var iX, iY;
 
+		$(document).on('mousedown','g',function(e){
+			if(parseInt($(this).attr('step'))%2==0){
+				dragging = true;
+				iX = e.pageX - this.offset.left;
+				iY = e.pageY - this.offset.top;
+				$(this).children('line').attr('x1',event.pageX);
+				$(this).children('line').attr('x2',event.pageX);
+				this.setCapture && this.setCapture();
+				return false;
+			}
+		});
+		document.onmousemove = function(e) {
+			if (dragging) {
+				var e = e || window.event;
+				var oX = e.pageX - iX;
+				var oY = e.pageY - iY;
+				$("line").attr({"x1":oX, "x2":oY});
+				return false;
+			}
+		}
+		$(document).on('mouseup','g',function(e) {
+			dragging = false;
+			$("line")[0].releaseCapture();
+			e.cancelBubble = true;
+		});
 
+//*/
 
+/*
+		var dragging = false;
+		var iX, iY;
+		$('line').mousedown(function(e) {
+			dragging = true;
+			iX = e.clientX - this.offsetLeft;
+			iY = e.clientY - this.offsetTop;
+			this.setCapture && this.setCapture();
+			return false;
+		});
+		document.onmousemove = function(e) {
+			if (dragging) {
+				var e = e || window.event;
+				var oX = e.clientX - iX;
+				var oY = e.clientY - iY;
+				$("line").css({"left":oX + "px", "top":oY + "px"});
+				return false;
+			}
+		};
+		$(document).mouseup(function(e) {
+			dragging = false;
+			$("line")[0].releaseCapture();
+			e.cancelBubble = true;
+		})
+//*/
 
 
 
