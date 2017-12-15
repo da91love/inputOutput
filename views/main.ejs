@@ -313,16 +313,17 @@
 		var iX, iY;
 
 		$(document).on('mousedown','g',function(e){
-			if(parseInt($(this).attr('step'))%2==0){
-				dragging = true;
-				iX = e.pageX - this.offset.left;
-				iY = e.pageY - this.offset.top;
-				$(this).children('line').attr('x1',event.pageX);
-				$(this).children('line').attr('x2',event.pageX);
-				this.setCapture && this.setCapture();
-				return false;
-			}
+			alert(e.pageX);
+			alert($(this).offset);
+			dragging = true;
+			iX = e.pageX - this.offset.left;
+			iY = e.pageY - this.offset.top;
+			$(this).children('line').attr('x1',event.pageX);
+			$(this).children('line').attr('x2',event.pageX);
+			this.setCapture && this.setCapture();
+			return false;
 		});
+
 		document.onmousemove = function(e) {
 			if (dragging) {
 				var e = e || window.event;
@@ -341,6 +342,7 @@
 //*/
 
 /*
+		https://codepen.io/Jonh/pen/jgyLB
 		var dragging = false;
 		var iX, iY;
 		$('line').mousedown(function(e) {

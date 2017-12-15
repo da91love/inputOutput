@@ -9,7 +9,9 @@ app.set('view engine','ejs');
 app.set('views', 'views');
 
 
-
+app.get('/test',function(req,res){
+	res.render('dragTest');
+});
 
 app.get('/main',function(req,res){
 	res.render('main');

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link href="http://fonts.googleapis.com/earlyaccess/hanna.css" rel="stylesheet">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+
+
+
+<body>
+	<div id="drag"></div>
+	<div class="page" style="position:fixed;">
+		<p id="pagex"></p>
+		<p id="pagey"></p>
+	</div>
+
+	<div class="screen" style="position:fixed;">
+		<p id="screenx"></p>
+		<p id="screeny"></p>
+	</div>
+
+
+	<div class="client" style="position:fixed;">
+		<p id="clientx"></p>
+		<p id="clienty"></p>
+	</div>
+
+
+
+		<svg class="canvas_inner" height="100%" width="100%">
+			<g class="line-in-canvas" step="1" num="1" children="0" >
+				<circle class="end_circle" cx="100" cy="100" r="30" id="initial-end-circle" stroke="black" stroke-width="2" fill="black" />
+			</g>
+		</svg>
+
+
+
+	<script>
+	$(function(){
+
+		$(document).mousemove(function(event){
+			$("#pagex").text("pageX:" + event.pageX);
+			$("#pagey").text("pageY:" +event.pageY);
+
+			$("#screenx").text("screenX:" + event.screenX);
+			$("#screeny").text("screenY:" + event.screenY);
+
+			$("#clientx").text("clientX:" + event.clientX);
+			$("#clienty").text("clientY:" + event.clientY);
+		});
+		//样式
+
+
+		var dragging = false;
+		var iX, iY;
+		$('.end_circle').mousedown(function(e){
+			dragging = true;
+//			iX =  parseInt(e.pageX) - parseInt($(this).attr('cx')); //순수하게 도형이 움직이 거리
+//			iY =  parseInt(e.pageY) - parseInt($(this).attr('cy'));
+		});
+
+		$('.end_circle').mousemove(function(e){
+			if(dragging){
+				$(this).attr('cx',parseInt($(this).attr('cx'))+iX);
+				$(this).attr('cy',parseInt($(this).attr('cy'))+iY);
+			}
+		});
+
+		$('.end_circle').mouseup(function(e){
+			if(dragging){
+				dragging = false;
+			}
+		});
+
+
+/*
+		$("#drag").css({"position":"absolute","top":"100px","left":"100px","border":"1px solid #789","width":"150px","height":"90px","background":"#988f82","cursor":"move"})
+
+		var dragging = false;
+		var iX, iY;
+
+		$("#drag").mousedown(function(e) {
+			dragging = true;
+			iX = e.clientX - this.offsetLeft;
+			iY = e.clientY - this.offsetTop;
+			this.setCapture && this.setCapture();
+			return false;
+		});
+		document.onmousemove = function(e) {
+			if (dragging) {
+				var e = e || window.event;
+				var oX = e.clientX - iX;
+				var oY = e.clientY - iY;
+				$("#drag").css({"left":oX + "px", "top":oY + "px"});
+				return false;
+			}
+		};
+		$(document).mouseup(function(e) {
+			dragging = false;
+			$("#drag")[0].releaseCapture();
+			e.cancelBubble = true;
+		});
+//*/
+
+
+
+	});
+
+
+
+
+
+
+	</script>
+
+
+
+
+</body>
+</html>
