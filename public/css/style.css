@@ -27,6 +27,11 @@ div.middle{
 	position: fixed;
 }
 
+.move-line{
+	float:right;
+}
+
+
 .canvas_outer{
 	height:100%;
 	float:right;

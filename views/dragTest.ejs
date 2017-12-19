@@ -67,14 +67,14 @@
 //			iY =  parseInt(e.pageY) - parseInt($(this).attr('cy'));
 		});
 
-		$('.end_circle').mousemove(function(e){
+		$(document).mousemove(function(e){
 			if(dragging){
-				$(this).attr('cx',parseInt($(this).attr('cx'))+iX);
-				$(this).attr('cy',parseInt($(this).attr('cy'))+iY);
+				$('.end_circle').attr('cx',e.pageX);
+				$('.end_circle').attr('cy',e.pageY);
 			}
 		});
 
-		$('.end_circle').mouseup(function(e){
+		$(document).mouseup(function(e){
 			if(dragging){
 				dragging = false;
 			}
