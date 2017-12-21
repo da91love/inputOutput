@@ -201,8 +201,8 @@
 			group.setAttributeNS(null, 'p-step', step);
 			group.setAttributeNS(null, 'p-num', num);
 			group.setAttributeNS(null, 'children', 0);
-			$lic.append(group);
-//			$lic.after(group);
+//			$lic.append(group);
+			$lic.after(group);
 
 		});
 
@@ -314,26 +314,19 @@
 			var children = $ldb.attr('children');
 			var pStep = $ldb.attr('p-step');
 			var pNum = $ldb.attr('p-num');
-			var all$ldb = $('.line-desc-bunch');
+			var $allLdb = $('.line-desc-bunch');
 			var $lic = null;
 			var $allLic = $('.line-in-canvas');
 
-			//선택된decs과 같은 레벨의 $lic 지정
+/*			//선택된decs과 같은 레벨의 $lic 지정
 			for(var i=0;i<$allLic.length;i++){
 				if($allLic.eq(i).attr('step')==step && $allLic.eq(i).attr('num')==num){
 					$lic = $allLic.eq(i);
 					break;
 				}
 			}
-
-			//if children is removed, its parent children attr decrease by 1 in desc
-			for(var i=0;i<all$ldb.length;i++){
-				if(all$ldb.eq(i).attr('step')==pStep && all$ldb.eq(i).attr('num')==pNum){
-					all$ldb.eq(i).attr('children',parseInt(all$ldb.eq(i).attr('children'))-1);
-					break;
-				}
-			}
-
+*/
+			
 			//if children is removed, its parent children attr decrease by 1 in canvas
 			for(var i=0;i<$allLic.length;i++){
 				if($allLic.eq(i).attr('step')==pStep && $allLic.eq(i).attr('num')==pNum){
@@ -342,60 +335,80 @@
 				}
 			}
 
-			//if parent is removed, its children will be deleted together in desc
-			$ldb.remove();
-
-
-
-			for(var i=0;i<$allLic.length;i++){
-				if($allLic.eq(i).attr('step')==step && $allLic.eq(i).attr('num')==num){
-					$allLic.eq(i).remove();
+			
+			for(var i=0;i<=$ldb.find('.line-desc-bunch').length;i++){
+				for(var k=0;k<$allLic.length;k++){
+					if($ldb.find('.line-desc-bunch').eq(i).attr('step')==$allLic.eq(k).attr('step')&&
+							$ldb.find('.line-desc-bunch').eq(i).attr('num')==$allLic.eq(k).attr('num')){
+						$allLic.eq(k).remove();
+					}
+					else if($ldb.attr('step')==$allLic.eq(k).attr('step')&&
+							$ldb.attr('num')==$allLic.eq(k).attr('num')){
+						$allLic.eq(k).remove();
+					}
+				}
+			}
+			
+			
+			//if children is removed, its parent children attr decrease by 1 in desc
+			for(var i=0;i<$allLdb.length;i++){
+				if($allLdb.eq(i).attr('step')==pStep && $allLdb.eq(i).attr('num')==pNum){
+					$allLdb.eq(i).attr('children',parseInt($allLdb.eq(i).attr('children'))-1);
 					break;
 				}
 			}
 
+			//if parent is removed, its children will be deleted together in desc
+			$ldb.remove();
+
+			
+
+			
 		});
 
 
 
+		
+		
 		//*********************라인의 위치 이동**********************//\
-		$(document).on('click','.upleft_line',function(){
-			var $ldb = $(this).parent().parent().parent();
-			alert($ldb.find('.line-desc-bunch').length);
 
-
-
-
-		});
-
-
-
-
-/* 도저히 이로직으로 불가능하다.. 실패입니다..
+//* 도저히 이로직으로 불가능하다.. 실패입니다..
 		var dragging = false;
-		var $target;
+		var $lineTarget;
+		var $allLic = $('.line-in-canvas');
+
 		$(document).on('mousedown','g.line-in-canvas',function(e){
 			dragging = true;
-			$target = $(this);
+			$lineTarget = $(this);
 		});
 
 
 		$(document).on('mousemove',document,function(e){
 			if(dragging){
-				if((parseInt($target.attr('step')))%2==0){
-					$target.find('line.line').attr({'x1':e.offsetX,'x2':e.offsetX});
-					$target.find('circle.start_circle').attr({'cx':e.offsetX});
-					$target.find('text.start_text').attr({'x':e.offsetX});
-					$target.find('circle.end_circle').attr({'cx':e.offsetX});
-					$target.find('text.end_text').attr({'x':e.offsetX});
+				var $descTarget;
+				for(var i=0;i<$(document).find('.line-desc-bunch').length;i++){
+					if($lineTarget.attr('step')==$(document).find('.line-desc-bunch').eq(i).attr('step') &&
+							$lineTarget.attr('num')==$(document).find('.line-desc-bunch').eq(i).attr('num')){
+						$descTarget = $(document).find('.line-desc-bunch').eq(i);
+					}
+				}
+				
+				
+				
+				if((parseInt($lineTarget.attr('step')))%2==0){
+					$lineTarget.find('line.line').attr({'x1':e.offsetX,'x2':e.offsetX});
+					$lineTarget.find('circle.start_circle').attr({'cx':e.offsetX});
+					$lineTarget.find('text.start_text').attr({'x':e.offsetX});
+					$lineTarget.find('circle.end_circle').attr({'cx':e.offsetX});
+					$lineTarget.find('text.end_text').attr({'x':e.offsetX});
 				}
 
 				else{
-					$target.find('line.line').attr({'y1':e.offsetY,'y2':e.offsetY});
-					$target.find('circle.start_circle').attr({'cy':e.offsetY});
-					$target.find('text.start_text').attr({'y':e.offsetY});
-					$target.find('circle.end_circle').attr({'cy':e.offsetY});
-					$target.find('text.end_text').attr({'y':e.offsetY});
+					$lineTarget.find('line.line').attr({'y1':e.offsetY,'y2':e.offsetY});
+					$lineTarget.find('circle.start_circle').attr({'cy':e.offsetY});
+					$lineTarget.find('text.start_text').attr({'y':e.offsetY});
+					$lineTarget.find('circle.end_circle').attr({'cy':e.offsetY});
+					$lineTarget.find('text.end_text').attr({'y':e.offsetY});
 				}
 			}
 		});
