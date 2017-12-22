@@ -181,14 +181,6 @@
 									'<span class="glyphicon glyphicon-plus"></span>'+
 								'</button>'+
 							'</div>'+
-							'<div class="move-line">'+
-								'<button class="upleft_line">'+
-									'<span class="glyphicon glyphicon-arrow-left"></span>'+
-								'</button>'+
-								'<button class="downright_line">'+
-									'<span class="glyphicon glyphicon-arrow-right"></span>'+
-								'</button>'+
-							'</div>'+
 						'</div>'+
 					'</div>';
 			$ldb.append(htmlDesc);
@@ -231,19 +223,19 @@
 				//line's start x point
 				x1 = $lic.children('line').attr('x1');
 				//line's start y point
-				y1 = parseInt($lic.children('line').attr('y1'))+parseInt($lic.children('line').attr('line-len'))*0.5*0.5;
+				y1 = parseInt($lic.children('line').attr('y1'))+parseInt($lic.children('line').attr('line-len'))*0.5*0.4;
 				//line's end x point
 				x2 = $lic.children('line').attr('x1');
 				//line's end y point
-				y2 = parseInt($lic.children('line').attr('y1'))-parseInt($lic.children('line').attr('line-len'))*0.5*0.5;
+				y2 = parseInt($lic.children('line').attr('y1'))-parseInt($lic.children('line').attr('line-len'))*0.5*0.4;
 			}
 			else{
 				//line's start x point
-				x1 = parseInt($lic.children('line').attr('x1'))-parseInt($lic.children('line').attr('line-len'))*0.5*0.5;
+				x1 = parseInt($lic.children('line').attr('x1'))-parseInt($lic.children('line').attr('line-len'))*0.5*0.4;
 				//line's start y point
 				y1 = $lic.children('line').attr('y2');
 				//line's end x point
-				x2 = parseInt($lic.children('line').attr('x1'))+parseInt($lic.children('line').attr('line-len'))*0.5*0.5;
+				x2 = parseInt($lic.children('line').attr('x1'))+parseInt($lic.children('line').attr('line-len'))*0.5*0.4;
 				//line's end y point
 				y2 = $lic.children('line').attr('y2');
 			}
@@ -281,7 +273,7 @@
 			start_text.setAttributeNS(null, 'y', y1);
 
 			var end_circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-			end_circle.setAttributeNS(null, 'class', 'start_circle');
+			end_circle.setAttributeNS(null, 'class', 'end_circle');
 			end_circle.setAttributeNS(null, 'stroke-width', '2');
 			end_circle.setAttributeNS(null, 'fill', 'black');
 			end_circle.setAttributeNS(null, 'cx', x2);
@@ -289,7 +281,7 @@
 			end_circle.setAttributeNS(null, 'r', '10');
 
 			var end_text = document.createElementNS('http://www.w3.org/2000/svg','text');
-			end_text.setAttributeNS(null, 'class', 'start_text');
+			end_text.setAttributeNS(null, 'class', 'end_text');
 			end_text.setAttributeNS(null, 'alignment-baseline', 'middle');
 			end_text.setAttributeNS(null, 'text-anchor', 'middle');
 			end_text.setAttributeNS(null, 'fill', 'white');
@@ -326,7 +318,7 @@
 				}
 			}
 */
-			
+
 			//if children is removed, its parent children attr decrease by 1 in canvas
 			for(var i=0;i<$allLic.length;i++){
 				if($allLic.eq(i).attr('step')==pStep && $allLic.eq(i).attr('num')==pNum){
@@ -335,7 +327,7 @@
 				}
 			}
 
-			
+
 			for(var i=0;i<=$ldb.find('.line-desc-bunch').length;i++){
 				for(var k=0;k<$allLic.length;k++){
 					if($ldb.find('.line-desc-bunch').eq(i).attr('step')==$allLic.eq(k).attr('step')&&
@@ -348,8 +340,8 @@
 					}
 				}
 			}
-			
-			
+
+
 			//if children is removed, its parent children attr decrease by 1 in desc
 			for(var i=0;i<$allLdb.length;i++){
 				if($allLdb.eq(i).attr('step')==pStep && $allLdb.eq(i).attr('num')==pNum){
@@ -361,21 +353,23 @@
 			//if parent is removed, its children will be deleted together in desc
 			$ldb.remove();
 
-			
 
-			
+
+
 		});
 
 
 
-		
-		
+
+
 		//*********************라인의 위치 이동**********************//\
 
 //* 도저히 이로직으로 불가능하다.. 실패입니다..
 		var dragging = false;
 		var $lineTarget;
-		var $allLic = $('.line-in-canvas');
+		var $allLic;
+		var $allLdb;
+		var ix, iy;
 
 		$(document).on('mousedown','g.line-in-canvas',function(e){
 			dragging = true;
@@ -386,15 +380,74 @@
 		$(document).on('mousemove',document,function(e){
 			if(dragging){
 				var $descTarget;
-				for(var i=0;i<$(document).find('.line-desc-bunch').length;i++){
-					if($lineTarget.attr('step')==$(document).find('.line-desc-bunch').eq(i).attr('step') &&
-							$lineTarget.attr('num')==$(document).find('.line-desc-bunch').eq(i).attr('num')){
-						$descTarget = $(document).find('.line-desc-bunch').eq(i);
+				$allLdb = $(document).find('.line-desc-bunch');
+				$allLic = $(document).find('.line-in-canvas');
+				for(var i=0;i<$allLdb.length;i++){
+					if($lineTarget.attr('step')==$allLdb.eq(i).attr('step') &&
+							$lineTarget.attr('num')==$allLdb.eq(i).attr('num')){
+						$descTarget = $allLdb.eq(i);
 					}
 				}
-				
-				
-				
+
+
+				for(var i=0;i<=$allLdb.length;i++){
+					if((parseInt($lineTarget.attr('step')))%2==0){
+						ix = parseInt(e.offsetX) - parseInt($lineTarget.find('line.line').attr('x1'));
+						for(var k=0;k<$allLic.length;k++){
+							if($descTarget.find('.line-desc-bunch').eq(i).attr('step')==$allLic.eq(k).attr('step')&&
+									$descTarget.find('.line-desc-bunch').eq(i).attr('num')==$allLic.eq(k).attr('num')){
+								//alert($allLic.eq(k).attr('step'));
+
+								var originX1 = $allLic.eq(k).find('line.line').attr('x1');
+								var originX2 = $allLic.eq(k).find('line.line').attr('x2');
+
+								$allLic.eq(k).find('line.line').attr({'x1':parseInt(originX1)+ix,'x2':parseInt(originX2)+ix});
+								$allLic.eq(k).find('circle.start_circle').attr({'cx':parseInt(originX1)+ix});
+								$allLic.eq(k).find('text.start_text').attr({'x':parseInt(originX1)+ix});
+								$allLic.eq(k).find('circle.end_circle').attr({'cx':parseInt(originX2)+ix});
+								$allLic.eq(k).find('text.end_text').attr({'x':parseInt(originX2)+ix});
+
+							}
+							else if($descTarget.attr('step')==$allLic.eq(k).attr('step')&&
+									$descTarget.attr('num')==$allLic.eq(k).attr('num')){
+								$allLic.eq(k).find('line.line').attr({'x1':e.offsetX,'x2':e.offsetX});
+								$allLic.eq(k).find('circle.start_circle').attr({'cx':e.offsetX});
+								$allLic.eq(k).find('text.start_text').attr({'x':e.offsetX});
+								$allLic.eq(k).find('circle.end_circle').attr({'cx':e.offsetX});
+								$allLic.eq(k).find('text.end_text').attr({'x':e.offsetX});
+							}
+						}
+					}
+
+					else{
+						iy = parseInt(e.offsetY) - parseInt($lineTarget.find('line.line').attr('y1'));
+						for(var k=0;k<$allLic.length;k++){
+							if($descTarget.find('.line-desc-bunch').eq(i).attr('step')==$allLic.eq(k).attr('step')&&
+									$descTarget.find('.line-desc-bunch').eq(i).attr('num')==$allLic.eq(k).attr('num')){
+
+								var originY1 = $allLic.eq(k).find('line.line').attr('y1');
+								var originY2 = $allLic.eq(k).find('line.line').attr('y2');
+
+								$allLic.eq(k).find('line.line').attr({'y1':parseInt(originY1)+iy,'y2':parseInt(originY2)+iy});
+								$allLic.eq(k).find('circle.start_circle').attr({'cy':parseInt(originY1)+iy});
+								$allLic.eq(k).find('text.start_text').attr({'y':parseInt(originY1)+iy});
+								$allLic.eq(k).find('circle.end_circle').attr({'cy':parseInt(originY2)+iy});
+								$allLic.eq(k).find('text.end_text').attr({'y':parseInt(originY2)+iy});
+
+							}
+							else if($descTarget.attr('step')==$allLic.eq(k).attr('step')&&
+									$descTarget.attr('num')==$allLic.eq(k).attr('num')){
+								$allLic.eq(k).find('line.line').attr({'y1':e.offsetY,'y2':e.offsetY});
+								$allLic.eq(k).find('circle.start_circle').attr({'cy':e.offsetY});
+								$allLic.eq(k).find('text.start_text').attr({'y':e.offsetY});
+								$allLic.eq(k).find('circle.end_circle').attr({'cy':e.offsetY});
+								$allLic.eq(k).find('text.end_text').attr({'y':e.offsetY});
+							}
+						}
+					}
+				}
+
+/*
 				if((parseInt($lineTarget.attr('step')))%2==0){
 					$lineTarget.find('line.line').attr({'x1':e.offsetX,'x2':e.offsetX});
 					$lineTarget.find('circle.start_circle').attr({'cx':e.offsetX});
@@ -410,6 +463,7 @@
 					$lineTarget.find('circle.end_circle').attr({'cy':e.offsetY});
 					$lineTarget.find('text.end_text').attr({'y':e.offsetY});
 				}
+*/
 			}
 		});
 
