@@ -146,8 +146,7 @@
 			var $allLic = $('.line-in-canvas');
 
 			for(var i=0;i<$allLic.length;i++){
-				if($allLic.eq(i).attr('step')==step &&
-						$allLic.eq(i).attr('num')==num){
+				if($allLic.eq(i).attr('step')==step && $allLic.eq(i).attr('num')==num){
 					$lic = $allLic.eq(i);
 					break;
 				}
@@ -368,6 +367,9 @@
 //* 도저히 이로직으로 불가능하다.. 실패입니다..
 		var dragging = false;
 		var $lineTarget;
+		var $allLic;
+		var $allLdb;
+		var ix, iy;
 
 		$(document).on('mousedown','g.line-in-canvas',function(e){
 			dragging = true;
@@ -375,87 +377,93 @@
 		});
 
 
-
 		$(document).on('mousemove',document,function(e){
-			var $allLdb = $(document).find('.line-desc-bunch');
-			var $allLic = $(document).find('.line-in-canvas');
-			var $descTarget;
-			var ix, iy;
-
 			if(dragging){
-
+				var $descTarget;
+				$allLdb = $(document).find('.line-desc-bunch');
+				$allLic = $(document).find('.line-in-canvas');
 				for(var i=0;i<$allLdb.length;i++){
 					if($lineTarget.attr('step')==$allLdb.eq(i).attr('step') &&
-							$lineTarget.attr('num')==$allLdb.eq(i).attr('num') &&
-							$lineTarget.attr('p-step')==$allLdb.eq(i).attr('p-step') &&
-							$lineTarget.attr('p-num')==$allLdb.eq(i).attr('p-num')){
+							$lineTarget.attr('num')==$allLdb.eq(i).attr('num')){
 						$descTarget = $allLdb.eq(i);
-						break;
 					}
 				}
 
-				if(parseInt($lineTarget.attr('step'))%2==0){
-					ix = parseInt(e.offsetX) - parseInt($lineTarget.find('line.line').attr('x1'));
 
+				for(var i=0;i<=$allLdb.length;i++){
+					if((parseInt($lineTarget.attr('step')))%2==0){
+						ix = parseInt(e.offsetX) - parseInt($lineTarget.find('line.line').attr('x1'));
+						for(var k=0;k<$allLic.length;k++){
+							if($descTarget.find('.line-desc-bunch').eq(i).attr('step')==$allLic.eq(k).attr('step')&&
+									$descTarget.find('.line-desc-bunch').eq(i).attr('num')==$allLic.eq(k).attr('num')){
+								//alert($allLic.eq(k).attr('step'));
+
+								var originX1 = $allLic.eq(k).find('line.line').attr('x1');
+								var originX2 = $allLic.eq(k).find('line.line').attr('x2');
+
+								$allLic.eq(k).find('line.line').attr({'x1':parseInt(originX1)+ix,'x2':parseInt(originX2)+ix});
+								$allLic.eq(k).find('circle.start_circle').attr({'cx':parseInt(originX1)+ix});
+								$allLic.eq(k).find('text.start_text').attr({'x':parseInt(originX1)+ix});
+								$allLic.eq(k).find('circle.end_circle').attr({'cx':parseInt(originX2)+ix});
+								$allLic.eq(k).find('text.end_text').attr({'x':parseInt(originX2)+ix});
+
+							}
+							else if($descTarget.attr('step')==$allLic.eq(k).attr('step')&&
+									$descTarget.attr('num')==$allLic.eq(k).attr('num')){
+								$allLic.eq(k).find('line.line').attr({'x1':e.offsetX,'x2':e.offsetX});
+								$allLic.eq(k).find('circle.start_circle').attr({'cx':e.offsetX});
+								$allLic.eq(k).find('text.start_text').attr({'x':e.offsetX});
+								$allLic.eq(k).find('circle.end_circle').attr({'cx':e.offsetX});
+								$allLic.eq(k).find('text.end_text').attr({'x':e.offsetX});
+							}
+						}
+					}
+
+					else{
+						iy = parseInt(e.offsetY) - parseInt($lineTarget.find('line.line').attr('y1'));
+						for(var k=0;k<$allLic.length;k++){
+							if($descTarget.find('.line-desc-bunch').eq(i).attr('step')==$allLic.eq(k).attr('step')&&
+									$descTarget.find('.line-desc-bunch').eq(i).attr('num')==$allLic.eq(k).attr('num')){
+
+								var originY1 = $allLic.eq(k).find('line.line').attr('y1');
+								var originY2 = $allLic.eq(k).find('line.line').attr('y2');
+
+								$allLic.eq(k).find('line.line').attr({'y1':parseInt(originY1)+iy,'y2':parseInt(originY2)+iy});
+								$allLic.eq(k).find('circle.start_circle').attr({'cy':parseInt(originY1)+iy});
+								$allLic.eq(k).find('text.start_text').attr({'y':parseInt(originY1)+iy});
+								$allLic.eq(k).find('circle.end_circle').attr({'cy':parseInt(originY2)+iy});
+								$allLic.eq(k).find('text.end_text').attr({'y':parseInt(originY2)+iy});
+
+							}
+							else if($descTarget.attr('step')==$allLic.eq(k).attr('step')&&
+									$descTarget.attr('num')==$allLic.eq(k).attr('num')){
+								$allLic.eq(k).find('line.line').attr({'y1':e.offsetY,'y2':e.offsetY});
+								$allLic.eq(k).find('circle.start_circle').attr({'cy':e.offsetY});
+								$allLic.eq(k).find('text.start_text').attr({'y':e.offsetY});
+								$allLic.eq(k).find('circle.end_circle').attr({'cy':e.offsetY});
+								$allLic.eq(k).find('text.end_text').attr({'y':e.offsetY});
+							}
+						}
+					}
+				}
+
+/*
+				if((parseInt($lineTarget.attr('step')))%2==0){
 					$lineTarget.find('line.line').attr({'x1':e.offsetX,'x2':e.offsetX});
 					$lineTarget.find('circle.start_circle').attr({'cx':e.offsetX});
 					$lineTarget.find('text.start_text').attr({'x':e.offsetX});
 					$lineTarget.find('circle.end_circle').attr({'cx':e.offsetX});
 					$lineTarget.find('text.end_text').attr({'x':e.offsetX});
-
-					//alert($descTarget.find('.line-desc-bunch').length);
-
-					for(var k=0;k<$descTarget.find('.line-desc-bunch').length;k++){
-						for(var i=0;i<=$allLic.length;i++){
-							if($descTarget.find('.line-desc-bunch').eq(k).attr('step')==$allLic.eq(i).attr('step') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('num')==$allLic.eq(i).attr('num') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('p-step')==$allLic.eq(i).attr('p-step') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('p-num')==$allLic.eq(i).attr('p-num')){
-								//alert($allLic.eq(k).attr('step'));
-
-									var originX1 = $allLic.eq(i).find('line.line').attr('x1');
-									var originX2 = $allLic.eq(i).find('line.line').attr('x2');
-
-									$allLic.eq(i).find('line.line').attr({'x1':parseInt(originX1)+ix,'x2':parseInt(originX2)+ix});
-									$allLic.eq(i).find('circle.start_circle').attr({'cx':parseInt(originX1)+ix});
-									$allLic.eq(i).find('text.start_text').attr({'x':parseInt(originX1)+ix});
-									$allLic.eq(i).find('circle.end_circle').attr({'cx':parseInt(originX2)+ix});
-									$allLic.eq(i).find('text.end_text').attr({'x':parseInt(originX2)+ix});
-							}
-						}
-					}
 				}
 
 				else{
-					iy = parseInt(e.offsetY) - parseInt($lineTarget.find('line.line').attr('y1'));
-
 					$lineTarget.find('line.line').attr({'y1':e.offsetY,'y2':e.offsetY});
 					$lineTarget.find('circle.start_circle').attr({'cy':e.offsetY});
 					$lineTarget.find('text.start_text').attr({'y':e.offsetY});
 					$lineTarget.find('circle.end_circle').attr({'cy':e.offsetY});
 					$lineTarget.find('text.end_text').attr({'y':e.offsetY});
-
-					//alert($descTarget.find('.line-desc-bunch').length);
-
-					for(var k=0;k<$descTarget.find('.line-desc-bunch').length;k++){
-						for(var i=0;i<=$allLic.length;i++){
-							if($descTarget.find('.line-desc-bunch').eq(k).attr('step')==$allLic.eq(i).attr('step') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('num')==$allLic.eq(i).attr('num') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('p-step')==$allLic.eq(i).attr('p-step') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('p-num')==$allLic.eq(i).attr('p-num')){
-
-									var originY1 = $allLic.eq(i).find('line.line').attr('y1');
-									var originY2 = $allLic.eq(i).find('line.line').attr('y2');
-
-									$allLic.eq(i).find('line.line').attr({'y1':parseInt(originY1)+iy,'y2':parseInt(originY2)+iy});
-									$allLic.eq(i).find('circle.start_circle').attr({'cy':parseInt(originY1)+iy});
-									$allLic.eq(i).find('text.start_text').attr({'y':parseInt(originY1)+iy});
-									$allLic.eq(i).find('circle.end_circle').attr({'cy':parseInt(originY2)+iy});
-									$allLic.eq(i).find('text.end_text').attr({'y':parseInt(originY2)+iy});
-							}
-						}
-					}
 				}
+*/
 			}
 		});
 

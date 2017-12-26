@@ -24,7 +24,7 @@ div.middle{
 
 	background-color:white;
 	overflow-y: scroll;
-	position: fixed;
+	/*position: fixed;*/
 }
 
 .move-line{
