@@ -43,7 +43,7 @@
 
 	<div class="middle">
 		<div class="line_description">
-			<div class="line-desc-bunch" step="1" num="1" children="0">
+			<div class="line-desc-bunch" step="1" key="0">
 				<div class="panel panel-default">
 					<table class="table table-striped">
 						<tr>
@@ -66,7 +66,7 @@
 
 		<div class="canvas_outer">
 			<svg class="canvas_inner" height="100%" width="100%">
-				<g class="line-in-canvas" step="1" num="1" children="0" >
+				<g class="line-in-canvas" step="1" key="0">
 					<line class="line" id="initial-line" line-len=""/>
 					<!--  start point   -->
 					<circle class="start_circle" id="initial-start-circle" stroke="black" stroke-width="2" fill="black" />
@@ -85,6 +85,14 @@
 		//가로넓이 지정하면,
 		//canvas_outer가로 수정, 세로 크기 가로의 1/3수정
 		//canvas_inner
+
+
+		//*********************라인별 고유키 생성**********************//
+		var dependencyKey=0;
+
+		function createDependencyKey(){
+			dependencyKey=dependencyKey+1;
+		}
 
 		//*********************초기 브라우저의 길이, 원의 위치, 텍스트의 위치를 지정**********************//
 		$('.middle').css({"width" : $(document).width() + "px"});
@@ -134,34 +142,85 @@
 
 
 
+		//*********************해당 셀렉터에 마우스가 올라갈시 색변함**********************//
+		$(document).on('mouseenter','.line-desc-bunch',function(e){
+			var $ldb = $(this);
+			var key= $ldb.attr('key');
+			var test =$ldb.find('.line-desc-bunch');
+			console.log(test.length);
 
-		//*********************plus button 클릭시 하위레벨의 라인 desc 생성**********************//
-		$(document).on('click','.add_line',function(){
-			var $ldb = $(this).parent().parent().parent();
-			var step = $ldb.attr('step');
-			var children = $ldb.attr('children');
-			var num = $ldb.attr('num');
 
 			var $lic = null;
-			var $allLic = $('.line-in-canvas');
+			var $allLic = $(document).find('.line-in-canvas');
+
 
 			for(var i=0;i<$allLic.length;i++){
-				if($allLic.eq(i).attr('step')==step &&
-						$allLic.eq(i).attr('num')==num){
+				if($allLic.eq(i).attr('key')==key){
+					$lic = $allLic.eq(i);
+					break;
+				}
+			}
+			$ldb.find('.panel').css({
+				'border-color':'rgb(255, 102, 102)',
+				'border-width':'7px'
+			});
+
+			$lic.find('.line').css({'stroke':'rgb(255, 102, 102)','stroke-width':'3'});
+			$lic.find('.start_circle').attr({'fill':'rgb(255, 102, 102)','stroke':'rgb(255, 102, 102)'});
+			$lic.find('.end_circle').attr({'fill':'rgb(255, 102, 102)','stroke':'rgb(255, 102, 102)'});
+		});
+
+
+		$(document).on('mouseleave','.line-desc-bunch',function(e){
+			var $ldb = $(this);
+			var key= $ldb.attr('key');
+
+			var $lic = null;
+			var $allLic = $(document).find('.line-in-canvas');
+
+			for(var i=0;i<$allLic.length;i++){
+				if($allLic.eq(i).attr('key')==key){
 					$lic = $allLic.eq(i);
 					break;
 				}
 			}
 
-			//config children
-			$ldb.attr('children',parseInt(children)+1);
-			$lic.attr('children',parseInt(children)+1);
+			$ldb.find('.panel').css({
+				'border-color':'',
+				'border-width':'1px'
+			});
+
+			$lic.find('.line').css({'stroke':'rgb(0,0,0)','stroke-width':'2'});
+			$lic.find('.start_circle').attr({'fill':'black','stroke':'black'});
+			$lic.find('.end_circle').attr({'fill':'black','stroke':'black'});
+		});
+
+
+
+		//*********************plus button 클릭시 하위레벨의 라인 desc 생성**********************//
+		$(document).on('click','.add_line',function(){
+			var $ldb = $(this).parent().parent().parent();
+			var step = $ldb.attr('step');
+			var key= $ldb.attr('key');
+
+
+			var $lic = null;
+			var $allLic = $(document).find('.line-in-canvas');
+
+
+			for(var i=0;i<$allLic.length;i++){
+				if($allLic.eq(i).attr('key')==key){
+					$lic = $allLic.eq(i);
+					break;
+				}
+			}
+
+			createDependencyKey();
 
 			//add input-ouput box in desc part
 			var htmlDesc ='<div class="line-desc-bunch" '+
-						'step="'+(parseInt(step)+1)+'" num="'+(parseInt(children)+1)+'" '+
-						'p-step="'+step+ '" p-num="'+ num +'" '+
-						'children="0" style="width:'+ ($(this).parent().parent().width()-20)+'px;'+
+						'step="'+(parseInt(step)+1)+ '" key="'+dependencyKey+ '" '+
+						'style="width:'+ ($(this).parent().parent().width()-20)+'px;'+
 						'float:right;border-left: 2px dotted rgb(0,64,0);">'+
 						'<div class="panel panel-default">'+
 							'<table class="table table-striped">'+
@@ -190,10 +249,7 @@
 			var group = document.createElementNS('http://www.w3.org/2000/svg','g');
 			group.setAttributeNS(null, 'class', 'line-in-canvas');
 			group.setAttributeNS(null, 'step', parseInt(step)+1);
-			group.setAttributeNS(null, 'num', parseInt(children)+1);
-			group.setAttributeNS(null, 'p-step', step);
-			group.setAttributeNS(null, 'p-num', num);
-			group.setAttributeNS(null, 'children', 0);
+			group.setAttributeNS(null, 'key', dependencyKey);
 //			$lic.append(group);
 			$lic.after(group);
 
@@ -203,19 +259,19 @@
 		$(document).on('click','.add_line',function(){
 			var $ldb = $(this).parent().parent().parent();
 			var step = $ldb.attr('step');
-			var children = $ldb.attr('children');
-			var num = $ldb.attr('num');
+			var key= $ldb.attr('key');
+
 			var $lic = null;
-			var $allLic = $('.line-in-canvas');
+			var $allLic = $(document).find('.line-in-canvas');
 
 			for(var i=0;i<$allLic.length;i++){
-				if($allLic.eq(i).attr('step')==step && $allLic.eq(i).attr('num')==num){
+				if($allLic.eq(i).attr('key')==key){
 					$lic = $allLic.eq(i);
 					break;
 				}
 			}
 
-			//corordination config
+			//coordination config
 			var x1 = null;
 			var y1 = null;
 			var x2 = null;
@@ -241,10 +297,12 @@
 				y2 = $lic.children('line').attr('y2');
 			}
 
-			var new$lic = null;
+
+			//Find <g> tag which added above
+			var $newLic = null;
 			for(var i=0;i<$allLic.length;i++){
-				if($allLic.eq(i).attr('step')==parseInt(step)+1 && $allLic.eq(i).attr('num')==parseInt(children)){
-					new$lic = $allLic.eq(i);
+				if($allLic.eq(i).attr('key')==dependencyKey){
+					$newLic = $allLic.eq(i);
 					break;
 				}
 			}
@@ -289,11 +347,11 @@
 			end_text.setAttributeNS(null, 'x', x2);
 			end_text.setAttributeNS(null, 'y', y2);
 
-			new$lic.append(line);
-			new$lic.append(start_circle);
-			new$lic.append(start_text);
-			new$lic.append(end_circle);
-			new$lic.append(end_text);
+			$newLic.append(line);
+			$newLic.append(start_circle);
+			$newLic.append(start_text);
+			$newLic.append(end_circle);
+			$newLic.append(end_text);
 		});
 
 
@@ -303,69 +361,34 @@
 			alert('하위 레벨까지 모두 삭제됩니다. 정말 삭제하시겠습니까?');
 			var $ldb = $(this).parent().parent().parent();
 			var step = $ldb.attr('step');
-			var num = $ldb.attr('num');
-			var children = $ldb.attr('children');
-			var pStep = $ldb.attr('p-step');
-			var pNum = $ldb.attr('p-num');
-			var $allLdb = $('.line-desc-bunch');
+			var key= $ldb.attr('key');
+
+			var $allLdb = $(document).find('.line-desc-bunch');
 			var $lic = null;
-			var $allLic = $('.line-in-canvas');
-
-/*			//선택된decs과 같은 레벨의 $lic 지정
-			for(var i=0;i<$allLic.length;i++){
-				if($allLic.eq(i).attr('step')==step && $allLic.eq(i).attr('num')==num){
-					$lic = $allLic.eq(i);
-					break;
-				}
-			}
-*/
-
-			//if children is removed, its parent children attr decrease by 1 in canvas
-			for(var i=0;i<$allLic.length;i++){
-				if($allLic.eq(i).attr('step')==pStep && $allLic.eq(i).attr('num')==pNum){
-					$allLic.eq(i).attr('children',parseInt($allLic.eq(i).attr('children'))-1);
-					break;
-				}
-			}
+			var $allLic = $(document).find('.line-in-canvas');
 
 
-			for(var i=0;i<=$ldb.find('.line-desc-bunch').length;i++){
-				for(var k=0;k<$allLic.length;k++){
-					if($ldb.find('.line-desc-bunch').eq(i).attr('step')==$allLic.eq(k).attr('step')&&
-							$ldb.find('.line-desc-bunch').eq(i).attr('num')==$allLic.eq(k).attr('num')){
-						$allLic.eq(k).remove();
-					}
-					else if($ldb.attr('step')==$allLic.eq(k).attr('step')&&
-							$ldb.attr('num')==$allLic.eq(k).attr('num')){
-						$allLic.eq(k).remove();
-					}
-				}
-			}
-
-
-			//if children is removed, its parent children attr decrease by 1 in desc
-			for(var i=0;i<$allLdb.length;i++){
-				if($allLdb.eq(i).attr('step')==pStep && $allLdb.eq(i).attr('num')==pNum){
-					$allLdb.eq(i).attr('children',parseInt($allLdb.eq(i).attr('children'))-1);
-					break;
-				}
-			}
-
-			//if parent is removed, its children will be deleted together in desc
+			//desc remove
 			$ldb.remove();
 
 
+			//line remove
+			for(var i=0;i<=$ldb.find('.line-desc-bunch').length;i++){
+				for(var k=0;k<$allLic.length;k++){
+					if($ldb.find('.line-desc-bunch').eq(i).attr('key')==$allLic.eq(k).attr('key')){
+						$allLic.eq(k).remove();
 
+					}
+					else if($ldb.attr('key')==$allLic.eq(k).attr('key')){
+						$allLic.eq(k).remove();
 
+					}
+				}
+			}
 		});
-
-
-
-
 
 		//*********************라인의 위치 이동**********************//\
 
-//* 도저히 이로직으로 불가능하다.. 실패입니다..
 		var dragging = false;
 		var $lineTarget;
 
@@ -385,10 +408,7 @@
 			if(dragging){
 
 				for(var i=0;i<$allLdb.length;i++){
-					if($lineTarget.attr('step')==$allLdb.eq(i).attr('step') &&
-							$lineTarget.attr('num')==$allLdb.eq(i).attr('num') &&
-							$lineTarget.attr('p-step')==$allLdb.eq(i).attr('p-step') &&
-							$lineTarget.attr('p-num')==$allLdb.eq(i).attr('p-num')){
+					if($lineTarget.attr('key')==$allLdb.eq(i).attr('key')){
 						$descTarget = $allLdb.eq(i);
 						break;
 					}
@@ -407,10 +427,7 @@
 
 					for(var k=0;k<$descTarget.find('.line-desc-bunch').length;k++){
 						for(var i=0;i<=$allLic.length;i++){
-							if($descTarget.find('.line-desc-bunch').eq(k).attr('step')==$allLic.eq(i).attr('step') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('num')==$allLic.eq(i).attr('num') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('p-step')==$allLic.eq(i).attr('p-step') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('p-num')==$allLic.eq(i).attr('p-num')){
+							if($descTarget.find('.line-desc-bunch').eq(k).attr('key')==$allLic.eq(i).attr('key')){
 								//alert($allLic.eq(k).attr('step'));
 
 									var originX1 = $allLic.eq(i).find('line.line').attr('x1');
@@ -439,10 +456,7 @@
 
 					for(var k=0;k<$descTarget.find('.line-desc-bunch').length;k++){
 						for(var i=0;i<=$allLic.length;i++){
-							if($descTarget.find('.line-desc-bunch').eq(k).attr('step')==$allLic.eq(i).attr('step') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('num')==$allLic.eq(i).attr('num') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('p-step')==$allLic.eq(i).attr('p-step') &&
-									$descTarget.find('.line-desc-bunch').eq(k).attr('p-num')==$allLic.eq(i).attr('p-num')){
+							if($descTarget.find('.line-desc-bunch').eq(k).attr('key')==$allLic.eq(i).attr('key')){
 
 									var originY1 = $allLic.eq(i).find('line.line').attr('y1');
 									var originY2 = $allLic.eq(i).find('line.line').attr('y2');
@@ -464,10 +478,6 @@
 				dragging = false;
 			}
 		});
-//*/
-
-
-
 
 	</script>
 
